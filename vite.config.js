@@ -9,16 +9,14 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      // vite.config.js
       manifest: {
-        name: 'Habar Cuaca',
-        short_name: 'HabarCuaca',
-        description: 'Aplikasi Cuaca Kalimantan Selatan',
-        theme_color: '#2563eb', // Blue-600
         icons: [
           {
-            src: 'pwa-192x192.png', // Anda perlu menyiapkan icon ini di folder public/
+            src: 'pwa-192x192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
+            purpose: 'any maskable' // Tambahkan ini agar logo tidak terpotong
           },
           {
             src: 'pwa-512x512.png',

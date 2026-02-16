@@ -4,12 +4,15 @@ import { searchLocation } from './services/weatherApi';
 import { useWeather } from './hooks/useWeather';
 import { useDebounce } from './hooks/useDebounce';
 import { getWeatherDescription } from './utils/weatherIcons';
+import { getAiAdvice } from './services/aiService';
 
 export default function App() {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [isSelecting, setIsSelecting] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
+  const [aiAdvice, setAiAdvice] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
   // Default ke Tabalong, South Kalimantan
   const [coords, setCoords] = useState(() => {
     const saved = localStorage.getItem('last_location');
@@ -26,6 +29,17 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (data && !loading) {
+      const fetchAi = async () => {
+        setAiLoading(true);
+        const advice = await getAiAdvice(data, coords.name);
+        setAiAdvice(advice);
+        setAiLoading(false);
+      };
+      fetchAi();
+    }
+  }, [data]);
 
   useEffect(() => {
     const getSuggestions = async () => {
@@ -179,9 +193,30 @@ export default function App() {
               </div>
               <div className={`h-2 w-2 rounded-full ${data.current.wind_speed_10m > 20 ? 'bg-red-500' : 'bg-[#3DF2E0]'}`}></div>
             </div>
+            {/* AI ADVICE */}
+            <div className="mt-6 bg-[#0B0F14] border border-[#3DF2E0]/30 rounded-[2rem] p-6 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-3 opacity-20 group-hover:opacity-100 transition-opacity">
+                <div className="w-2 h-2 bg-[#3DF2E0] rounded-full animate-ping"></div>
+              </div>
 
+              <p className="text-[10px] font-black text-[#3DF2E0] uppercase tracking-[0.3em] mb-3">
+                AI Training Advisor
+              </p>
+
+              {aiLoading ? (
+                <div className="flex space-x-1">
+                  <div className="w-1.5 h-1.5 bg-[#3DF2E0] rounded-full animate-bounce"></div>
+                  <div className="w-1.5 h-1.5 bg-[#3DF2E0] rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                  <div className="w-1.5 h-1.5 bg-[#3DF2E0] rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                </div>
+              ) : (
+                <p className="text-white text-sm leading-relaxed font-medium italic">
+                  "{aiAdvice}"
+                </p>
+              )}
+            </div>
             {/* Daily Forecast */}
-            <div className="px-2">
+            <div className="px-2 mt-6">
               <div className="flex items-center space-x-2 mb-4">
                 <Calendar size={14} className="text-[#3DF2E0]" />
                 <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">3-Day Forecast</h3>
