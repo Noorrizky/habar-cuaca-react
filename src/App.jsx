@@ -181,17 +181,30 @@ export default function App() {
             {/* Cycling Status - Berdasarkan hobi road bike Anda */}
             <div className="bg-slate-50 rounded-[2rem] p-6 mb-6 flex items-center justify-between border-2 border-transparent hover:border-[#3DF2E0]/30 transition-all">
               <div className="flex items-center space-x-4">
-                <div className={`p-3 rounded-2xl ${data.current.wind_speed_10m < 20 ? 'bg-[#3DF2E0]/10 text-[#0B0F14]' : 'bg-red-50 text-red-600'}`}>
+                <div className={`p-3 rounded-2xl ${data.current.weather_code >= 95 || data.current.weather_code >= 51 && data.current.weather_code <= 67 || data.current.weather_code >= 80 && data.current.weather_code <= 82
+                    ? 'bg-red-50 text-red-600'
+                    : data.current.wind_speed_10m > 20
+                      ? 'bg-orange-50 text-orange-600'
+                      : 'bg-[#3DF2E0]/10 text-[#0B0F14]'
+                  }`}>
                   <Navigation size={20} className={data.current.wind_speed_10m >= 20 ? 'animate-pulse' : ''} />
                 </div>
                 <div>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Ride Conditions</p>
                   <h4 className="font-bold text-sm">
-                    {data.current.wind_speed_10m > 20 ? "High Winds - Use Caution" : "Perfect for a Ride"}
+                    {data.current.weather_code >= 95 ? "Stormy - Stay Indoors!" :
+                      (data.current.weather_code >= 51 && data.current.weather_code <= 67) || (data.current.weather_code >= 80 && data.current.weather_code <= 82) ? "Raining - Wet Roads" :
+                        data.current.wind_speed_10m > 20 ? "High Winds - Use Caution" :
+                          "Perfect for a Ride"}
                   </h4>
                 </div>
               </div>
-              <div className={`h-2 w-2 rounded-full ${data.current.wind_speed_10m > 20 ? 'bg-red-500' : 'bg-[#3DF2E0]'}`}></div>
+              <div className={`h-2 w-2 rounded-full ${data.current.weather_code >= 95 || (data.current.weather_code >= 51 && data.current.weather_code <= 82)
+                  ? 'bg-red-500'
+                  : data.current.wind_speed_10m > 20
+                    ? 'bg-orange-500'
+                    : 'bg-[#3DF2E0]'
+                }`}></div>
             </div>
             {/* AI ADVICE */}
             <div className="mt-6 bg-[#0B0F14] border border-[#3DF2E0]/30 rounded-[2rem] p-6 relative overflow-hidden group">
