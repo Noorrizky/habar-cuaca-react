@@ -1,17 +1,19 @@
 # TUTORIAL INSTALL
 
-First run
+1. Run
 ```
 npm install
 ```
-Then edit file .env
+
+2. Then edit the '.env' file
 type your groq api key
 
+3. Then run
 ```
 npm run build
 ```
 
-Lastly (for localhost test)
+4. Lastly (for localhost test)
 ```
 npm run dev
 ```
