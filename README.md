@@ -5,10 +5,11 @@
 npm install
 ```
 
-2. Then edit the '.env' file
+2. Then copy .env.example to .env
+3. Edit the '.env' file
 type your groq api key
 
-3. Then run
+4. Then run
 ```
 npm run build
 ```
